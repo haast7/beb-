@@ -9,7 +9,7 @@ export function GoogleTagManager() {
     <>
       <Script
         id="gtm-consent"
-        strategy="beforeInteractive"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];

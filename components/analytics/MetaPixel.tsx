@@ -26,12 +26,14 @@ export function MetaPixel() {
         }}
       />
       <noscript>
-        <img
-          height="1"
-          width="1"
-          style={{ display: 'none' }}
-          src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
-          alt=""
+        <div
+          style={{ 
+            height: '1px', 
+            width: '1px', 
+            display: 'none',
+            backgroundImage: `url(https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1)`
+          }}
+          aria-hidden="true"
         />
       </noscript>
     </>

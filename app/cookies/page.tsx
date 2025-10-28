@@ -663,8 +663,8 @@ export default function CookiesPage() {
                         <div className="bg-gray-50 p-4 rounded-lg">
                           <h4 className="font-semibold text-gray-900 mb-2">Google Chrome:</h4>
                           <ol className="list-decimal list-inside space-y-1 text-gray-700">
-                            <li>Menu (três pontos) > Configurações</li>
-                            <li>Privacidade e segurança > Cookies e outros dados do site</li>
+                            <li>Menu (três pontos) &gt; Configurações</li>
+                            <li>Privacidade e segurança &gt; Cookies e outros dados do site</li>
                             <li>Escolha: Permitir, Bloquear ou Limpar cookies</li>
                           </ol>
                         </div>

@@ -651,10 +651,10 @@ export default function PrivacidadePage() {
                         <div>
                           <h4 className="font-semibold text-gray-900 mb-2">No navegador:</h4>
                           <ul className="list-disc list-inside space-y-1 text-gray-700">
-                            <li>Chrome: Configurações > Privacidade e segurança > Cookies</li>
-                            <li>Firefox: Preferências > Privacidade e segurança</li>
-                            <li>Safari: Preferências > Privacidade</li>
-                            <li>Edge: Configurações > Cookies e permissões de site</li>
+                            <li>Chrome: Configurações &gt; Privacidade e segurança &gt; Cookies</li>
+                            <li>Firefox: Preferências &gt; Privacidade e segurança</li>
+                            <li>Safari: Preferências &gt; Privacidade</li>
+                            <li>Edge: Configurações &gt; Cookies e permissões de site</li>
                           </ul>
                         </div>
                         
