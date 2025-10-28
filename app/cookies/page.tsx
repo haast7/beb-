@@ -672,7 +672,7 @@ export default function CookiesPage() {
                         <div className="bg-gray-50 p-4 rounded-lg">
                           <h4 className="font-semibold text-gray-900 mb-2">Mozilla Firefox:</h4>
                           <ol className="list-decimal list-inside space-y-1 text-gray-700">
-                            <li>Menu (três linhas) > Configurações</li>
+                            <li>Menu (três linhas) &gt; Configurações</li>
                             <li>Privacidade e Segurança</li>
                             <li>Cookies e dados de sites</li>
                           </ol>
@@ -681,7 +681,7 @@ export default function CookiesPage() {
                         <div className="bg-gray-50 p-4 rounded-lg">
                           <h4 className="font-semibold text-gray-900 mb-2">Safari:</h4>
                           <ol className="list-decimal list-inside space-y-1 text-gray-700">
-                            <li>Preferências > Privacidade</li>
+                            <li>Preferências &gt; Privacidade</li>
                             <li>Gerenciar dados de sites</li>
                             <li>Bloquear todos os cookies (opcional)</li>
                           </ol>
@@ -690,7 +690,7 @@ export default function CookiesPage() {
                         <div className="bg-gray-50 p-4 rounded-lg">
                           <h4 className="font-semibold text-gray-900 mb-2">Microsoft Edge:</h4>
                           <ol className="list-decimal list-inside space-y-1 text-gray-700">
-                            <li>Menu (três pontos) > Configurações</li>
+                            <li>Menu (três pontos) &gt; Configurações</li>
                             <li>Cookies e permissões de site</li>
                             <li>Gerenciar e excluir cookies</li>
                           </ol>
