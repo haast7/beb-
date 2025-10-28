@@ -235,7 +235,7 @@ export function GarantiasSection() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <WhatsAppButton
-                variant="outline-white"
+                variant="outline"
                 size="lg"
                 source="garantias-diagnostico"
                 message="Olá! Gostaria de agendar um diagnóstico gratuito de 30min sobre minha clínica/laboratório."
@@ -244,7 +244,7 @@ export function GarantiasSection() {
                 Agende diagnóstico gratuito
               </WhatsAppButton>
               <WhatsAppButton
-                variant="outline-white"
+                variant="outline"
                 size="lg"
                 source="garantias-info"
                 message="Olá! Gostaria de saber mais sobre o processo da Haast - 30min sem compromisso."
