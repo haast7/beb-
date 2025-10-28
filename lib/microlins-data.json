@@ -1,0 +1,70 @@
+{
+  "id": "microlins",
+  "name": "Microlins",
+  "logo": "/portfolio/placeholder.jpg",
+  "coverImage": "/portfolio/empresas/Microlins/capa.png",
+  "carrossels": [
+    {
+      "id": "avulso",
+      "name": "Avulso",
+      "images": [
+        "/portfolio/empresas/Microlins/avulso1.png",
+        "/portfolio/empresas/Microlins/avulso2.png",
+        "/portfolio/empresas/Microlins/avulso3.png",
+        "/portfolio/empresas/Microlins/avulso4.png"
+      ]
+    },
+    {
+      "id": "feed",
+      "name": "Feed",
+      "images": [
+        "/portfolio/empresas/Microlins/feed1.png",
+        "/portfolio/empresas/Microlins/feed2.png",
+        "/portfolio/empresas/Microlins/feed3.png",
+        "/portfolio/empresas/Microlins/feed4.png"
+      ]
+    },
+    {
+      "id": "3-perguntas",
+      "name": "3 Perguntas",
+      "images": [
+        "/portfolio/empresas/Microlins/MICROLINS_3_PERGUNTAS_01.png",
+        "/portfolio/empresas/Microlins/MICROLINS_3_PERGUNTAS_02.png",
+        "/portfolio/empresas/Microlins/MICROLINS_3_PERGUNTAS_03.png",
+        "/portfolio/empresas/Microlins/MICROLINS_3_PERGUNTAS_04.png"
+      ]
+    },
+    {
+      "id": "construa",
+      "name": "Construa",
+      "images": [
+        "/portfolio/empresas/Microlins/MICROLINS_CONSTRUA_01.png",
+        "/portfolio/empresas/Microlins/MICROLINS_CONSTRUA_02.png"
+      ]
+    },
+    {
+      "id": "novembro-04",
+      "name": "Novembro 04",
+      "images": [
+        "/portfolio/empresas/Microlins/NOvembto04.1.png",
+        "/portfolio/empresas/Microlins/NOvembto04.2.png",
+        "/portfolio/empresas/Microlins/NOvembto04.3.png",
+        "/portfolio/empresas/Microlins/NOvembto04.4.png",
+        "/portfolio/empresas/Microlins/NOvembto04.5.png"
+      ]
+    },
+    {
+      "id": "novembro-05",
+      "name": "Novembro 05",
+      "images": [
+        "/portfolio/empresas/Microlins/NOvembto05.1.png",
+        "/portfolio/empresas/Microlins/NOvembto05.2.png",
+        "/portfolio/empresas/Microlins/NOvembto05.3.png",
+        "/portfolio/empresas/Microlins/NOvembto05.4.png",
+        "/portfolio/empresas/Microlins/NOvembto05.5.png"
+      ]
+    }
+  ]
+}
+
+

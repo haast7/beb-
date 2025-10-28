@@ -1,0 +1,83 @@
+{
+  "id": "cicatriclin",
+  "name": "Cicatriclin",
+  "logo": "/portfolio/placeholder.jpg",
+  "coverImage": "/portfolio/empresas/Cicatriclin/capa.png",
+  "carrossels": [
+    {
+      "id": "avulso",
+      "name": "Avulso",
+      "images": [
+        "/portfolio/empresas/Cicatriclin/Avulso1.png",
+        "/portfolio/empresas/Cicatriclin/Avulso2.png",
+        "/portfolio/empresas/Cicatriclin/Avulso3.png",
+        "/portfolio/empresas/Cicatriclin/Avulso4.png",
+        "/portfolio/empresas/Cicatriclin/Avulso5.png"
+      ]
+    },
+    {
+      "id": "outdoor-principal",
+      "name": "Outdoor Principal",
+      "images": [
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_OUTDOOR.png"
+      ]
+    },
+    {
+      "id": "outdoor-cirurgico",
+      "name": "Outdoor Cirúrgico",
+      "images": [
+        "/portfolio/empresas/Cicatriclin/CICATRICLI_OUTDOOR_P93SCIRURGICO.png"
+      ]
+    },
+    {
+      "id": "doppler",
+      "name": "Doppler",
+      "images": [
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_DOPPLER_01.png",
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_DOPPLER_02.png",
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_DOPPLER_03.png",
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_DOPPLER_04.png"
+      ]
+    },
+    {
+      "id": "feridinha",
+      "name": "Feridinha",
+      "images": [
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_FERIDINHA_01.png",
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_FERIDINHA_02.png",
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_FERIDINHA_03.png",
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_FERIDINHA_04.png",
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_FERIDINHA_05.png"
+      ]
+    },
+    {
+      "id": "guia",
+      "name": "Guia",
+      "images": [
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_GUIA_01.png",
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_GUIA_02.png",
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_GUIA_03.png"
+      ]
+    },
+    {
+      "id": "tratamento-hospitalar",
+      "name": "Tratamento Hospitalar",
+      "images": [
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_TRATAMENTO_HOSPITALAR_2_01.png",
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_TRATAMENTO_HOSPITALAR_2_02.png",
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_TRATAMENTO_HOSPITALAR_2_03.png",
+        "/portfolio/empresas/Cicatriclin/CICATRICLIN_TRATAMENTO_HOSPITALAR_2_04.png"
+      ]
+    },
+    {
+      "id": "hospitalar",
+      "name": "Hospitalar",
+      "images": [
+        "/portfolio/empresas/Cicatriclin/HOSPITALAR_01.png",
+        "/portfolio/empresas/Cicatriclin/HOSPITALAR_02.png",
+        "/portfolio/empresas/Cicatriclin/HOSPITALAR_03.png",
+        "/portfolio/empresas/Cicatriclin/HOSPITALAR_04.png"
+      ]
+    }
+  ]
+}

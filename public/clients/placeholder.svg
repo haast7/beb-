@@ -1,0 +1,5 @@
+<svg width="120" height="60" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="60" rx="8" fill="#F2F2F2"/>
+  <rect x="20" y="15" width="80" height="30" rx="4" fill="#E0E0E0"/>
+  <text x="60" y="35" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="10">Logo Cliente</text>
+</svg>

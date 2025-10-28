@@ -1,0 +1,83 @@
+{
+  "id": "labo-laboratorio-oliveira",
+  "name": "Labo Laboratório Oliveira",
+  "logo": "/portfolio/placeholder.jpg",
+  "coverImage": "/portfolio/empresas/Labo Laboratório Oliveira/capa.png",
+  "carrossels": [
+    {
+      "id": "avulso",
+      "name": "Avulso",
+      "images": [
+        "/portfolio/empresas/Labo Laboratório Oliveira/avulso1.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/avulso2.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/avulso3.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/avulso4.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/avulso5.png"
+      ]
+    },
+    {
+      "id": "dengue",
+      "name": "Dengue",
+      "images": [
+        "/portfolio/empresas/Labo Laboratório Oliveira/dengue1.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/dengue2.png"
+      ]
+    },
+    {
+      "id": "agua",
+      "name": "Agua",
+      "images": [
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_81GUA_2_01.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_81GUA_2_02.png"
+      ]
+    },
+    {
+      "id": "agendamento",
+      "name": "Agendamento",
+      "images": [
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_AGENDAMENTO_1.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_AGENDAMENTO_2.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_AGENDAMENTO_3.png"
+      ]
+    },
+    {
+      "id": "horarios",
+      "name": "Horarios",
+      "images": [
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_HOR81RIOS_3_01.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_HOR81RIOS_3_02.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_HOR81RIOS_3_03.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_HOR81RIOS_3_04.png"
+      ]
+    },
+    {
+      "id": "paperless",
+      "name": "Paperless",
+      "images": [
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_PAPERLESS_5_01.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_PAPERLESS_5_02.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_PAPERLESS_5_03.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_PAPERLESS_5_04.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_PAPERLESS_5_05.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/LABO_PAPERLESS_5_06.png"
+      ]
+    },
+    {
+      "id": "checkup",
+      "name": "Checkup",
+      "images": [
+        "/portfolio/empresas/Labo Laboratório Oliveira/NOLABOTEM_CHECKUP_01.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/NOLABOTEM_CHECKUP_02.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/NOLABOTEM_CHECKUP_03.png",
+        "/portfolio/empresas/Labo Laboratório Oliveira/NOLABOTEM_CHECKUP_04.png"
+      ]
+    },
+    {
+      "id": "outros",
+      "name": "Outros",
+      "images": [
+        "/portfolio/empresas/Labo Laboratório Oliveira/outdoor-ferias.png"
+      ]
+    }
+  ]
+}
