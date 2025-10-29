@@ -52,14 +52,14 @@ export function SobreHeroSection() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-yellow-500/5 to-orange-500/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="container relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="container relative z-10 px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-8 md:py-16">
           {/* Conteúdo Principal */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="space-y-8"
+            className="space-y-6 md:space-y-8"
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -103,15 +103,15 @@ export function SobreHeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="space-y-6"
+              className="space-y-4 md:space-y-6"
             >
               <WhatsAppButton
                 size="xl"
                 source="sobre-hero"
-                className="group"
+                className="group w-full md:w-auto hover:scale-100 md:hover:scale-105"
               >
                 Conheça nossa história
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-0 md:group-hover:translate-x-1 transition-transform" />
               </WhatsAppButton>
 
               {/* DNA Values */}

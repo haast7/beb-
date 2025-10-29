@@ -51,7 +51,11 @@ export function Header() {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center space-x-4">
-            <WhatsAppButton size="sm" source="header">
+            <WhatsAppButton 
+              size="sm" 
+              source="header"
+              className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+            >
               Falar no WhatsApp
             </WhatsAppButton>
           </div>
@@ -89,7 +93,10 @@ export function Header() {
                 </Link>
               ))}
               <div className="pt-4">
-                <WhatsAppButton className="w-full" source="mobile_menu">
+                <WhatsAppButton 
+                  className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300" 
+                  source="mobile_menu"
+                >
                   Falar no WhatsApp
                 </WhatsAppButton>
               </div>

@@ -135,10 +135,10 @@ export function ServicosHeroSection() {
                 size="lg"
                 source="servicos-hero"
                 message="Olá! Gostaria de agendar um diagnóstico gratuito para minha clínica."
-                className="group"
+                className="group w-full md:w-auto hover:scale-100 md:hover:scale-105"
               >
                 Agendar Diagnóstico Gratuito
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-0 md:group-hover:translate-x-1 transition-transform" />
               </WhatsAppButton>
               <div className="flex items-center space-x-2 text-white/80">
                 <Zap className="h-5 w-5" />

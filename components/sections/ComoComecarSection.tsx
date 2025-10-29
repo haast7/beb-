@@ -119,10 +119,10 @@ export function ComoComecarSection() {
                       size="lg"
                       source={`como-comecar-${index + 1}`}
                       message={`Olá! Gostaria de ${step.cta.toLowerCase()}.`}
-                      className="group"
+                      className="group w-full md:w-auto hover:scale-100 md:hover:scale-105"
                     >
                       {step.cta}
-                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-0 md:group-hover:translate-x-1 transition-transform" />
                     </WhatsAppButton>
                   </div>
                 </div>

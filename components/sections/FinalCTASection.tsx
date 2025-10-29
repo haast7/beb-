@@ -119,10 +119,10 @@ export function FinalCTASection() {
               size="xl"
               source="final_cta"
               message="Olá! Quero agenda lotada - falar com Haast agora!"
-              className="group text-xl py-6 px-12"
+              className="group w-full md:w-auto text-lg md:text-xl py-4 md:py-6 px-6 md:px-12 hover:scale-100 md:hover:scale-105"
             >
               Quero Agenda Lotada — Falar com Haast Agora
-              <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 md:ml-3 h-5 md:h-6 w-5 md:w-6 group-hover:translate-x-0 md:group-hover:translate-x-1 transition-transform" />
             </WhatsAppButton>
 
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8 text-sm text-haast-gray-light">

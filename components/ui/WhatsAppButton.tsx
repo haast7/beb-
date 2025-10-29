@@ -22,9 +22,13 @@ export function WhatsAppButton({
   variant = 'default',
   source = 'button',
   message = 'Olá! Gostaria de saber mais sobre o Plano Captação 3K da Haast.',
-  useForm = true // Por padrão, usa o formulário
+  useForm
 }: WhatsAppButtonProps) {
   const { isOpen, openForm, closeForm } = useLeadForm();
+
+  // Detecta automaticamente se deve usar WhatsApp direto baseado no texto do botão
+  const shouldUseWhatsApp = useForm !== undefined ? !useForm : 
+    (typeof children === 'string' && children.toLowerCase().includes('whatsapp'));
 
   const handleClick = () => {
     trackWhatsAppClick(source, {
@@ -32,11 +36,11 @@ export function WhatsAppButton({
       message_preview: message.substring(0, 50) + '...',
     });
 
-    if (useForm) {
-      openForm(source, message);
-    } else {
+    if (shouldUseWhatsApp) {
       const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5511914423606';
       window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+    } else {
+      openForm(source, message);
     }
   };
 

@@ -50,14 +50,14 @@ export function ComoFuncionaHeroSection() {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-haast-primary/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="container relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="container relative z-10 px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-8 md:py-16">
           {/* Conteúdo Principal */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="space-y-8"
+            className="space-y-6 md:space-y-8"
           >
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -87,15 +87,15 @@ export function ComoFuncionaHeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="space-y-6"
+              className="space-y-4 md:space-y-6"
             >
               <WhatsAppButton
                 size="xl"
                 source="hero-como-funciona"
-                className="group"
+                className="group w-full md:w-auto hover:scale-100 md:hover:scale-105"
               >
                 Quero entender o processo
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-0 md:group-hover:translate-x-1 transition-transform" />
               </WhatsAppButton>
 
               {/* Elementos de Credibilidade */}
