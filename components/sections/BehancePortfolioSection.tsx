@@ -43,6 +43,11 @@ export function BehancePortfolioSection() {
   const [microlinsData, setMicrolinsData] = useState<MicrolinsPortfolioItem | null>(null);
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | LaboPortfolioItem | CicatriclinPortfolioItem | MicrolinsPortfolioItem | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  
+  // Debug: Log quando selectedImage muda
+  useEffect(() => {
+    console.log('selectedImage mudou para:', selectedImage);
+  }, [selectedImage]);
   const [currentCarrosselIndex, setCurrentCarrosselIndex] = useState(0);
 
   // Carrega automaticamente os itens do portfólio
@@ -116,12 +121,27 @@ export function BehancePortfolioSection() {
   };
 
   const openImageModal = (imageSrc: string) => {
+    console.log('Tentando abrir modal de imagem:', imageSrc);
     setSelectedImage(imageSrc);
   };
 
   const closeImageModal = () => {
     setSelectedImage(null);
   };
+
+  // Fechar modal com ESC
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && selectedImage) {
+        closeImageModal();
+      }
+    };
+
+    if (selectedImage) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [selectedImage]);
 
   const nextCarrossel = () => {
     if (selectedItem && 'carrossels' in selectedItem) {
@@ -286,8 +306,16 @@ export function BehancePortfolioSection() {
                                   initial={{ opacity: 0, scale: 0.9 }}
                                   animate={{ opacity: 1, scale: 1 }}
                                   transition={{ duration: 0.3, delay: imageIndex * 0.1 }}
-                                  className={`${getImageSize(carrossel.images.length, carrossel.id)} cursor-pointer group`}
-                                  onClick={() => openImageModal(image)}
+                                  className={`${getImageSize(carrossel.images.length, carrossel.id)} cursor-pointer group relative`}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    console.log('Clique na imagem detectado:', image);
+                                    console.log('Evento de clique:', e);
+                                    console.log('Target:', e.target);
+                                    openImageModal(image);
+                                  }}
+                                  onMouseDown={(e) => e.preventDefault()}
                                 >
                                   <div className={`relative overflow-hidden rounded-lg transition-all duration-300 group-hover:shadow-lg ${
                                     carrossel.id.includes('outdoor') || carrossel.id === 'outros' 
@@ -310,8 +338,15 @@ export function BehancePortfolioSection() {
                                     />
                                     
                                     {/* Overlay de Zoom */}
-                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                                      <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
+                                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center space-y-2">
+                                        <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
+                                          <ZoomIn className="w-6 h-6 text-haast-primary" />
+                                        </div>
+                                        <span className="text-white text-xs font-medium bg-black/50 px-2 py-1 rounded">
+                                          Clique para ampliar
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
                                 </motion.div>
@@ -356,14 +391,14 @@ export function BehancePortfolioSection() {
           )}
         </AnimatePresence>
 
-        {/* Modal de Imagem Individual */}
+        {/* Modal de Imagem Individual - Melhorado */}
         <AnimatePresence>
           {selectedImage && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-60 flex items-center justify-center p-4"
+              className="fixed inset-0 z-[100] flex items-center justify-center p-4"
             >
               {/* Backdrop */}
               <div 
@@ -376,29 +411,43 @@ export function BehancePortfolioSection() {
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                className="relative w-full max-w-6xl max-h-[90vh] bg-white rounded-2xl overflow-hidden shadow-2xl"
+                className="relative w-full max-w-7xl max-h-[95vh] bg-white rounded-2xl overflow-hidden shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
               >
-                {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                  <h4 className="text-lg font-semibold text-gray-900">
-                    Visualização Individual
-                  </h4>
+                {/* Header Melhorado */}
+                <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-haast-primary rounded-full flex items-center justify-center">
+                      <ExternalLink className="w-4 h-4 text-white" />
+                    </div>
+                    <h4 className="text-lg font-semibold text-gray-900">
+                      Visualização em Tela Cheia
+                    </h4>
+                  </div>
                   <button
                     onClick={closeImageModal}
-                    className="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors duration-200"
+                    className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors duration-200 group"
+                    title="Fechar visualização (ESC)"
                   >
-                    <X className="w-4 h-4 text-gray-600" />
+                    <X className="w-5 h-5 text-gray-600 group-hover:text-gray-800" />
                   </button>
                 </div>
 
-                {/* Imagem */}
-                <div className="relative w-full h-[calc(90vh-80px)]">
+                {/* Imagem com Melhor Controle */}
+                <div className="relative w-full h-[calc(95vh-80px)] bg-gray-100">
                   <Image
                     src={selectedImage}
                     alt="Visualização individual"
                     fill
-                    className="object-contain"
+                    className="object-contain p-4"
+                    priority
+                    quality={95}
                   />
+                  
+                  {/* Overlay de Instruções */}
+                  <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-2 rounded-lg text-sm">
+                    💡 Clique fora da imagem para fechar
+                  </div>
                 </div>
               </motion.div>
             </motion.div>
