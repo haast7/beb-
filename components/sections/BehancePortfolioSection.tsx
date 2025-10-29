@@ -47,6 +47,10 @@ export function BehancePortfolioSection() {
   // Debug: Log quando selectedImage muda
   useEffect(() => {
     console.log('selectedImage mudou para:', selectedImage);
+    console.log('selectedImage é válido?', selectedImage && typeof selectedImage === 'string' && selectedImage.length > 0);
+    if (selectedImage) {
+      console.log('URL completa da imagem:', selectedImage);
+    }
   }, [selectedImage]);
   const [currentCarrosselIndex, setCurrentCarrosselIndex] = useState(0);
 
@@ -122,6 +126,8 @@ export function BehancePortfolioSection() {
 
   const openImageModal = (imageSrc: string) => {
     console.log('Tentando abrir modal de imagem:', imageSrc);
+    console.log('Tipo do imageSrc:', typeof imageSrc);
+    console.log('imageSrc é string válida?', typeof imageSrc === 'string' && imageSrc.length > 0);
     setSelectedImage(imageSrc);
   };
 
@@ -229,6 +235,7 @@ export function BehancePortfolioSection() {
                     src={'cover' in item ? item.cover : (item as any).coverImage}
                     alt={`Capa do projeto ${item.name}`}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
@@ -292,12 +299,12 @@ export function BehancePortfolioSection() {
 
                 {/* Conteúdo do Modal - Scroll Vertical */}
                 <div className="max-h-[calc(95vh-120px)] overflow-y-auto">
-                  <div className="p-6">
+                  <div className="p-4 md:p-6">
                     {'carrossels' in selectedItem ? (
                       // Layout com carrosséis (Labo) - Mosaico Horizontal
                       <>
                         {selectedItem.carrossels.map((carrossel, carrosselIndex) => (
-                          <div key={carrossel.id} className={`w-full ${carrosselIndex > 0 ? 'mt-4' : ''}`}>
+                          <div key={carrossel.id} className={`w-full ${carrosselIndex > 0 ? 'mt-2 md:mt-4' : ''}`}>
                             {/* Carrossel de Imagens - Sem Título */}
                             <div className="flex gap-2 w-full">
                               {carrossel.images.map((image, imageIndex) => (
@@ -319,7 +326,7 @@ export function BehancePortfolioSection() {
                                 >
                                   <div className={`relative overflow-hidden rounded-lg transition-all duration-300 group-hover:shadow-lg ${
                                     carrossel.id.includes('outdoor') || carrossel.id === 'outros' 
-                                      ? 'w-full h-[28rem]' 
+                                      ? 'w-full h-48 md:h-[28rem]' 
                                       : 'border-2 border-gray-200 hover:border-haast-green'
                                   } ${
                                     carrossel.images.length === 1 && !carrossel.id.includes('outdoor') && carrossel.id !== 'outros' 
@@ -332,8 +339,11 @@ export function BehancePortfolioSection() {
                                       src={image}
                                       alt={`Imagem ${imageIndex + 1}`}
                                       fill
+                                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 25vw, 20vw"
                                       className={`group-hover:scale-105 transition-transform duration-300 ${
-                                        carrossel.images.length === 1 || carrossel.id.includes('outdoor') || carrossel.id === 'outros' ? 'object-contain' : 'object-cover'
+                                        carrossel.images.length === 1 || carrossel.id.includes('outdoor') || carrossel.id === 'outros' 
+                                          ? 'object-cover md:object-contain' 
+                                          : 'object-cover'
                                       }`}
                                     />
                                     
@@ -372,6 +382,7 @@ export function BehancePortfolioSection() {
                                 src={piece}
                                 alt={`Peça ${index + 1} de ${selectedItem.name}`}
                                 fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 className="object-cover group-hover:scale-105 transition-transform duration-300"
                               />
                               
@@ -434,15 +445,34 @@ export function BehancePortfolioSection() {
                 </div>
 
                 {/* Imagem com Melhor Controle */}
-                <div className="relative w-full h-[calc(95vh-80px)] bg-gray-100">
-                  <Image
-                    src={selectedImage}
-                    alt="Visualização individual"
-                    fill
-                    className="object-contain p-4"
-                    priority
-                    quality={95}
-                  />
+                <div className="relative w-full h-[calc(95vh-80px)] bg-gray-100 flex items-center justify-center">
+                  {selectedImage ? (
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={selectedImage}
+                        alt="Visualização individual"
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+                        className="object-contain"
+                        priority
+                        quality={95}
+                        onError={(e) => {
+                          console.error('Erro ao carregar imagem no modal:', selectedImage, e);
+                        }}
+                        onLoad={() => {
+                          console.log('Imagem carregada com sucesso:', selectedImage);
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center text-gray-500">
+                      <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-4">
+                        <X className="w-8 h-8" />
+                      </div>
+                      <p className="text-lg font-medium">Imagem não encontrada</p>
+                      <p className="text-sm">URL: {selectedImage}</p>
+                    </div>
+                  )}
                   
                   {/* Overlay de Instruções */}
                   <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-2 rounded-lg text-sm">
