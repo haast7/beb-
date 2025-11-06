@@ -12,7 +12,6 @@ const credibilityItems = [
 ];
 
 export function HeroSection() {
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-haast-primary to-haast-black-graphite">
       {/* Background com gradiente */}
@@ -28,15 +27,15 @@ export function HeroSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-8 pb-8 md:py-16">
           {/* Conteúdo Principal */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            initial={false}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0 }}
             className="space-y-8 md:space-y-8"
           >
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              initial={false}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0 }}
               className="text-hero text-white text-balance"
             >
               Sua agenda vazia enquanto seus{' '}
@@ -44,9 +43,9 @@ export function HeroSection() {
             </motion.h1>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              initial={false}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0 }}
               className="space-y-4"
             >
               <p className="text-body text-white/90 max-w-2xl">
@@ -58,9 +57,9 @@ export function HeroSection() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              initial={false}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0 }}
               className="space-y-6 md:space-y-6"
             >
               <WhatsAppButton
@@ -77,9 +76,9 @@ export function HeroSection() {
                 {credibilityItems.map((item, index) => (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
+                    initial={false}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0 }}
                     className="flex items-center space-x-3"
                   >
                     <CheckCircle className="h-5 w-5 text-haast-primary flex-shrink-0" />
@@ -92,10 +91,10 @@ export function HeroSection() {
 
           {/* Visual/Dashboard Mockup */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="relative"
+            initial={false}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0 }}
+            className="relative hidden md:block"
           >
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-2xl">
               <div className="space-y-4">

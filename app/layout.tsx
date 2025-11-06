@@ -14,6 +14,8 @@ const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
 });
 
 const poppins = Poppins({
@@ -21,6 +23,8 @@ const poppins = Poppins({
   weight: ['400', '500', '600', '700', '800', '900'],
   variable: '--font-poppins',
   display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
 });
 
 export const metadata: Metadata = {
@@ -107,7 +111,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://app.cal.com" />
         
         {/* Preload de recursos críticos */}
-        <link rel="preload" href="/logo.png" as="image" type="image/png" />
+        <link rel="preload" href="/logo.png" as="image" type="image/png" fetchPriority="high" />
         
         <GoogleTagManager />
         <GoogleAnalytics />
