@@ -15,8 +15,8 @@ export default function HomePage() {
     '@type': 'Organization',
     name: 'Haast',
     description: 'Infraestrutura Digital de Alta Performance para clínicas e laboratórios',
-    url: 'https://haast.tech',
-    logo: 'https://haast.tech/logo.png',
+    url: 'https://haast.com.br',
+    logo: 'https://haast.com.br/logo.png',
     sameAs: [
       'https://instagram.com/haastgrowth',
       'https://linkedin.com/company/haast',

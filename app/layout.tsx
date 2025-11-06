@@ -8,7 +8,7 @@ import { GoogleTagManager } from '@/components/analytics/GoogleTagManager';
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
 import { MetaPixel } from '@/components/analytics/MetaPixel';
 import { ScrollTracking } from '@/components/analytics/ScrollTracking';
-import { FixedWhatsAppButton } from '@/components/ui/FixedWhatsAppButton';
+import { FixedCalComButton } from '@/components/ui/FixedCalComButton';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     siteName: 'Haast',
     images: [
       {
-        url: '/og-image.jpg',
+        url: 'https://haast.com.br/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Haast - Infraestrutura Digital de Alta Performance',
@@ -98,6 +98,17 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${inter.variable} ${poppins.variable}`}>
       <head>
+        {/* Resource Hints para melhorar performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://app.cal.com" />
+        
+        {/* Preload de recursos críticos */}
+        <link rel="preload" href="/logo.png" as="image" type="image/png" />
+        
         <GoogleTagManager />
         <GoogleAnalytics />
         <MetaPixel />
@@ -111,13 +122,20 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#25f1ff" />
       </head>
       <body className={`${inter.className} antialiased`}>
+        {/* Skip to main content link para acessibilidade */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-haast-primary focus:text-white focus:rounded-md focus:shadow-lg"
+        >
+          Pular para o conteúdo principal
+        </a>
         <GoogleTagManager />
         <ConsentBanner />
         <ScrollTracking />
         <Header />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <Footer />
-        <FixedWhatsAppButton />
+        <FixedCalComButton />
       </body>
     </html>
   );

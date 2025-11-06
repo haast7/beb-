@@ -1,10 +1,13 @@
 import { MetadataRoute } from 'next';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 86400; // Revalidar a cada 24 horas
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://haast.com.br';
   const currentDate = new Date();
   
-  return [
+  const sitemapEntries: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: currentDate,
@@ -54,4 +57,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
     },
   ];
+
+  return sitemapEntries;
 }

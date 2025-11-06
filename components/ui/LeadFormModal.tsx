@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, Check, Building2, User, Mail, Phone, DollarSign, TrendingUp } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Check, Building2, User, Mail, Phone, DollarSign, TrendingUp, Calendar } from 'lucide-react';
 import { trackFormSubmit, trackEvent, trackMetaLead, trackMetaCompleteRegistration } from '@/lib/analytics';
 import { sendWebhook, formatBrazilianDateTime, getLeadSource, getFormType, mapCompanySize } from '@/lib/webhook';
+import { CalComInlineWidget } from '@/components/ui/CalComInlineWidget';
 
 interface LeadFormData {
   // Etapa 1
@@ -52,6 +53,7 @@ const revenueRanges = [
 
 export function LeadFormModal({ isOpen, onClose, source, initialMessage }: LeadFormModalProps) {
   const [currentStep, setCurrentStep] = useState(1);
+  const [showCalCom, setShowCalCom] = useState(false);
   const [formData, setFormData] = useState<LeadFormData>({
     firstName: '',
     lastName: '',
@@ -71,6 +73,7 @@ export function LeadFormModal({ isOpen, onClose, source, initialMessage }: LeadF
   useEffect(() => {
     if (isOpen) {
       setCurrentStep(1);
+      setShowCalCom(false);
       setFormData({
         firstName: '',
         lastName: '',
@@ -564,8 +567,52 @@ export function LeadFormModal({ isOpen, onClose, source, initialMessage }: LeadF
                   </h3>
                   
                   <p className="text-xl text-gray-600 mb-8 max-w-md mx-auto">
-                    Nossa equipe entrará em contato em até <strong>2 horas úteis</strong> para agendar uma conversa estratégica.
+                    {!showCalCom ? (
+                      <>
+                        Agende agora mesmo uma conversa estratégica ou nossa equipe entrará em contato em até <strong>2 horas úteis</strong>.
+                      </>
+                    ) : (
+                      <>
+                        Escolha o melhor horário para sua reunião estratégica de <strong>35 minutos</strong>.
+                      </>
+                    )}
                   </p>
+
+                  {!showCalCom ? (
+                    <div className="mb-8">
+                      <button
+                        onClick={() => {
+                          setShowCalCom(true);
+                          trackEvent('cal_com_open', {
+                            source: source,
+                            form_step: 'success',
+                          });
+                        }}
+                        className="w-full md:w-auto mx-auto flex items-center justify-center space-x-3 bg-gradient-to-r from-haast-primary to-haast-primary-dark hover:from-haast-primary-dark hover:to-haast-primary text-white font-bold py-4 px-6 md:px-8 rounded-xl transition-all duration-300 hover:scale-100 md:hover:scale-105 hover:shadow-lg shadow-md"
+                      >
+                        <Calendar className="h-5 w-5" />
+                        <span>📅 Agendar Reunião Estratégica</span>
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-2xl p-4 md:p-6 mb-8 border border-gray-200 shadow-lg">
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-lg font-semibold text-haast-black-graphite">
+                          📅 Agende sua reunião estratégica
+                        </h4>
+                        <button
+                          onClick={() => setShowCalCom(false)}
+                          className="text-gray-500 hover:text-gray-700 transition-colors"
+                          aria-label="Fechar calendário"
+                        >
+                          <X className="h-5 w-5" />
+                        </button>
+                      </div>
+                      <div className="w-full">
+                        <CalComInlineWidget />
+                      </div>
+                    </div>
+                  )}
 
                   <div className="bg-gradient-to-r from-haast-primary/10 to-haast-primary-dark/10 rounded-2xl p-6 mb-8">
                     <h4 className="text-lg font-semibold text-haast-black-graphite mb-4">

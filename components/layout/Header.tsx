@@ -67,12 +67,13 @@ export function Header() {
               className="text-gray-600 hover:text-haast-primary transition-colors duration-200"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
-              aria-label="Abrir menu de navegação"
+              aria-controls="mobile-menu"
+              aria-label={mobileMenuOpen ? "Fechar menu de navegação" : "Abrir menu de navegação"}
             >
               {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
+                <X className="h-6 w-6" aria-hidden="true" />
               ) : (
-                <Menu className="h-6 w-6" />
+                <Menu className="h-6 w-6" aria-hidden="true" />
               )}
             </button>
           </div>
@@ -80,7 +81,7 @@ export function Header() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden">
+          <div className="md:hidden" id="mobile-menu" role="menu">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-gray-50 border-t border-gray-200">
               {navigation.map((item) => (
                 <Link
