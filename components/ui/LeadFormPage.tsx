@@ -334,7 +334,7 @@ export function LeadFormPage() {
       {/* Form Content */}
       <div 
         ref={formContentRef}
-        className="p-6 max-h-[60vh] overflow-y-auto"
+        className="p-4 md:p-6 max-h-[60vh] overflow-y-auto"
         style={{
           scrollBehavior: 'smooth'
         }}
