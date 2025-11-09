@@ -2,12 +2,61 @@
 
 import { useEffect, useRef } from 'react';
 
+// Declaração global para tracking
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void;
+    dataLayer: any[];
+    fbq: (...args: any[]) => void;
+  }
+}
+
 export function CalComInlineWidget() {
   const containerRef = useRef<HTMLDivElement>(null);
   const initializedRef = useRef(false);
+  const handleBookingConfirmedRef = useRef<((e: any) => void) | null>(null);
 
   useEffect(() => {
     if (!containerRef.current || initializedRef.current) return;
+
+    // Função para trackear confirmação de agendamento
+    const trackBookingConfirmed = (bookingData?: any) => {
+      // Google Analytics 4
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('event', 'cal_com_booking_confirmed', {
+          event_category: 'conversion',
+          event_label: 'appointment_scheduled',
+          value: 1,
+          currency: 'BRL',
+        });
+      }
+
+      // Google Tag Manager
+      if (typeof window !== 'undefined' && window.dataLayer) {
+        window.dataLayer.push({
+          event: 'cal_com_booking_confirmed',
+          event_category: 'conversion',
+          event_label: 'appointment_scheduled',
+          booking_data: bookingData || {},
+          timestamp: new Date().toISOString(),
+        });
+      }
+
+      // Meta Pixel - Schedule Confirmed
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'Schedule', {
+          content_name: 'Reunião Estratégica Agendada',
+          content_category: 'Appointment',
+          value: 0,
+          currency: 'BRL',
+        });
+
+        // Custom event para tracking adicional
+        window.fbq('trackCustom', 'CalComBookingConfirmed', {
+          booking_data: bookingData || {},
+        });
+      }
+    };
 
     // Função auto-executável do Cal.com (conforme código fornecido)
     const initCalLoader = () => {
@@ -49,23 +98,49 @@ export function CalComInlineWidget() {
       
       try {
         // Inicializar conforme código fornecido
-        (window as any).Cal("init", "35min", {origin:"https://app.cal.com"});
+        (window as any).Cal("init", "diagnosticogratuito", {origin:"https://app.cal.com"});
         
-        (window as any).Cal.ns["35min"]("inline", {
+        (window as any).Cal.ns.diagnosticogratuito("inline", {
           elementOrSelector: containerRef.current,
-          config: {"layout":"month_view"},
-          calLink: "erickhaast/35min",
+          config: {"layout":"week_view"},
+          calLink: "erickhaast/diagnosticogratuito",
         });
 
-        (window as any).Cal.ns["35min"]("ui", {
+        (window as any).Cal.ns.diagnosticogratuito("ui", {
           "cssVarsPerTheme":{
             "light":{
-              "cal-brand":"#23051d"
+              "cal-brand":"#171515"
+            },
+            "dark":{
+              "cal-brand":"#0bfbf4"
             }
           },
           "hideEventTypeDetails":true,
-          "layout":"month_view"
+          "layout":"week_view"
         });
+
+        // Adicionar listeners para eventos do Cal.com
+        try {
+          // Listener para quando o booking é confirmado
+          handleBookingConfirmedRef.current = (e: any) => {
+            trackBookingConfirmed(e.detail || {});
+          };
+
+          // Escutar eventos do Cal.com
+          if (containerRef.current && handleBookingConfirmedRef.current) {
+            containerRef.current.addEventListener('bookingSuccessful', handleBookingConfirmedRef.current);
+            containerRef.current.addEventListener('bookingConfirmed', handleBookingConfirmedRef.current);
+            
+            // Também tentar escutar eventos globais do Cal.com
+            if ((window as any).Cal && (window as any).Cal.ns && (window as any).Cal.ns.diagnosticogratuito) {
+              // O Cal.com pode disparar eventos customizados
+              document.addEventListener('cal:bookingSuccessful', handleBookingConfirmedRef.current);
+              document.addEventListener('cal:bookingConfirmed', handleBookingConfirmedRef.current);
+            }
+          }
+        } catch (error) {
+          console.warn('Erro ao adicionar listeners do Cal.com:', error);
+        }
 
         initializedRef.current = true;
       } catch (error) {
@@ -84,10 +159,19 @@ export function CalComInlineWidget() {
     return () => {
       clearTimeout(timer);
       const containerElement = containerRef.current;
+      
+      // Remover event listeners (usar a referência do handleBookingConfirmed se disponível)
+      if (containerElement && handleBookingConfirmedRef.current) {
+        containerElement.removeEventListener('bookingSuccessful', handleBookingConfirmedRef.current);
+        containerElement.removeEventListener('bookingConfirmed', handleBookingConfirmedRef.current);
+        document.removeEventListener('cal:bookingSuccessful', handleBookingConfirmedRef.current);
+        document.removeEventListener('cal:bookingConfirmed', handleBookingConfirmedRef.current);
+      }
+      
       if (initializedRef.current && (window as any).Cal && containerElement) {
         try {
-          if ((window as any).Cal.ns && (window as any).Cal.ns["35min"]) {
-            (window as any).Cal.ns["35min"]("destroy", containerElement);
+          if ((window as any).Cal.ns && (window as any).Cal.ns.diagnosticogratuito) {
+            (window as any).Cal.ns.diagnosticogratuito("destroy", containerElement);
           }
         } catch (e) {
           // Ignorar erros de cleanup
@@ -98,13 +182,13 @@ export function CalComInlineWidget() {
 
   return (
     <div
-      id="my-cal-inline-35min"
+      id="my-cal-inline-diagnosticogratuito"
       ref={containerRef}
       style={{
         width: '100%',
         height: '100%',
         minHeight: '600px',
-        overflow: 'auto',
+        overflow: 'scroll',
       }}
       className="cal-com-inline-widget"
     />

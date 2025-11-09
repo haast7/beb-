@@ -1,11 +1,58 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 
 export function FixedCalComButton() {
   const initializedRef = useRef(false);
+  const pathname = usePathname();
 
   useEffect(() => {
+    // Se estiver na página /lead, remover o botão se existir
+    if (pathname === '/lead') {
+      // Tentar remover o botão flutuante do Cal.com se existir
+      const removeCalButton = () => {
+        try {
+          // Procurar por diferentes seletores que o Cal.com pode usar
+          const selectors = [
+            '[data-cal-namespace="diagnosticogratuito"]',
+            '[data-cal-link="erickhaast/diagnosticogratuito"]',
+            'iframe[src*="cal.com"]',
+            '.cal-floating-button',
+            '#cal-floating-button',
+          ];
+          
+          selectors.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+              element.remove();
+            }
+          });
+
+          // Tentar destruir via API do Cal.com
+          if ((window as any).Cal && (window as any).Cal.ns && (window as any).Cal.ns.diagnosticogratuito) {
+            try {
+              (window as any).Cal.ns.diagnosticogratuito("destroy");
+            } catch (e) {
+              // Ignorar erros
+            }
+          }
+        } catch (e) {
+          // Ignorar erros
+        }
+      };
+
+      // Remover imediatamente
+      removeCalButton();
+      
+      // Remover após um pequeno delay para garantir que o DOM foi atualizado
+      const timeout = setTimeout(removeCalButton, 100);
+      
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+
     if (initializedRef.current) return;
 
     // Função auto-executável do Cal.com (conforme código fornecido)
@@ -98,8 +145,12 @@ export function FixedCalComButton() {
 
     return () => {
       clearTimeout(timer);
+      // Limpar event listeners
+      ['mousedown', 'touchstart', 'keydown'].forEach(event => {
+        document.removeEventListener(event, initOnInteraction);
+      });
     };
-  }, []);
+  }, [pathname]);
 
   // O Cal.com cria o botão flutuante automaticamente, então não precisamos retornar JSX
   return null;

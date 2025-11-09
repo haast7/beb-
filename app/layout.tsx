@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter, Poppins } from 'next/font/google';
 import './globals.css';
+import { Suspense } from 'react';
+import { ConditionalLayout } from '@/components/layout/ConditionalLayout';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ConsentBanner } from '@/components/analytics/ConsentBanner';
@@ -8,7 +10,6 @@ import { GoogleTagManager } from '@/components/analytics/GoogleTagManager';
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
 import { MetaPixel } from '@/components/analytics/MetaPixel';
 import { ScrollTracking } from '@/components/analytics/ScrollTracking';
-import { FixedCalComButton } from '@/components/ui/FixedCalComButton';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -136,10 +137,15 @@ export default function RootLayout({
         <GoogleTagManager />
         <ConsentBanner />
         <ScrollTracking />
-        <Header />
-        <main id="main-content">{children}</main>
-        <Footer />
-        <FixedCalComButton />
+        <Suspense fallback={
+          <>
+            <Header />
+            <main id="main-content">{children}</main>
+            <Footer />
+          </>
+        }>
+          <ConditionalLayout>{children}</ConditionalLayout>
+        </Suspense>
       </body>
     </html>
   );
