@@ -1,10 +1,8 @@
 'use client';
 
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, lazy, Suspense, useRef } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, Check, Building2, User, Mail, Phone, DollarSign, TrendingUp, Calendar } from 'lucide-react';
-import { trackFormSubmit, trackEvent, trackMetaLead, trackMetaCompleteRegistration } from '@/lib/analytics';
-import { sendWebhook, formatBrazilianDateTime, getLeadSource, getFormType, mapCompanySize } from '@/lib/webhook';
+import { ChevronLeft, ChevronRight, Check, Building2, Mail, Phone, Calendar } from 'lucide-react';
 
 // Lazy load do Cal.com widget - só carrega quando necessário
 const CalComInlineWidget = lazy(() => import('@/components/ui/CalComInlineWidget').then(mod => ({ default: mod.CalComInlineWidget })));
@@ -50,6 +48,7 @@ export function LeadFormPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [showCalCom, setShowCalCom] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const formContentRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<LeadFormData>({
     trabalhaEmLabClinicaHospital: '',
     fullName: '',
@@ -113,6 +112,30 @@ export function LeadFormPage() {
     }
 
     setErrors(newErrors);
+    
+    // Se houver erros, fazer scroll para o primeiro campo com erro
+    if (Object.keys(newErrors).length > 0) {
+      // Aguardar um pouco para o estado atualizar
+      setTimeout(() => {
+        const firstErrorField = Object.keys(newErrors)[0] as keyof LeadFormData;
+        const errorElement = document.getElementById(firstErrorField);
+        
+        if (errorElement && formContentRef.current) {
+          // Scroll suave para o campo com erro
+          errorElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center',
+            inline: 'nearest'
+          });
+          
+          // Focar no campo após o scroll
+          setTimeout(() => {
+            errorElement.focus();
+          }, 500);
+        }
+      }, 100);
+    }
+    
     return Object.keys(newErrors).length === 0;
   };
 
@@ -121,23 +144,25 @@ export function LeadFormPage() {
       // Sempre vai para etapa 2, independente de "Sim" ou "Não"
       setCurrentStep(2);
       
-      // Google Analytics 4
-      trackEvent('form_step_completed', {
-        event_category: 'conversion',
-        event_label: 'step_1',
-        form_source: source,
-        step: 1
-      });
-
-      // Google Tag Manager
-      if (typeof window !== 'undefined' && window.dataLayer) {
-        window.dataLayer.push({
-          event: 'form_step_completed',
-          form_step: 1,
-          form_source: source,
-          timestamp: new Date().toISOString(),
+        // Lazy load de analytics apenas quando necessário
+        import('@/lib/analytics').then(({ trackEvent }) => {
+          trackEvent('form_step_completed', {
+            event_category: 'conversion',
+            event_label: 'step_1',
+            form_source: source,
+            step: 1
+          });
         });
-      }
+
+        // Google Tag Manager
+        if (typeof window !== 'undefined' && window.dataLayer) {
+          window.dataLayer.push({
+            event: 'form_step_completed',
+            form_step: 1,
+            form_source: source,
+            timestamp: new Date().toISOString(),
+          });
+        }
     } else if (currentStep === 2 && validateStep2()) {
       handleSubmit();
     }
@@ -153,6 +178,9 @@ export function LeadFormPage() {
     setIsSubmitting(true);
     
     try {
+      // Lazy load de analytics apenas quando necessário (não bloqueia renderização)
+      const { trackFormSubmit, trackEvent, trackMetaLead, trackMetaCompleteRegistration } = await import('@/lib/analytics');
+      
       // Google Analytics 4 - Form Submit
       trackFormSubmit('lead_form', true);
       trackEvent('form_submit', {
@@ -202,47 +230,27 @@ export function LeadFormPage() {
         });
       }
 
-      // Preparar dados para webhook
-      const now = new Date();
-      const { data, hora, timestamp } = formatBrazilianDateTime(now);
+      // Lazy load de webhook apenas quando necessário
+      const { sendMakeWebhook, formatBrazilianDateTimeFull } = await import('@/lib/webhook');
       
-      const webhookPayload = {
-        // Dados pessoais
-        nome: formData.fullName,
+      // Preparar dados para webhook Make.com (formato simplificado)
+      const now = new Date();
+      const horarioCadastro = formatBrazilianDateTimeFull(now);
+      
+      const makeWebhookPayload = {
+        trabalhaNaEmpresa: formData.trabalhaEmLabClinicaHospital || 'Não informado',
+        nomeESobrenome: formData.fullName,
+        telefoneWhatsapp: formData.phone,
         email: formData.email,
-        whatsapp: formData.phone,
-        site: formData.companyHandle,
-        
-        // Dados da empresa
-        segmento: formData.segment === 'Outro' ? formData.customSegment : formData.segment,
-        tamanhoEmpresa: mapCompanySize(formData.monthlyRevenue),
-        
-        // Dados de agendamento (opcional - pode ser implementado futuramente)
-        dataAgendamento: data,
-        horarioAgendamento: hora,
-        
-        // Dados de tracking
-        nomeFormulario: 'Formulário de Lead Haast',
-        carimboDataHora: timestamp,
-        agenteUsuario: typeof window !== 'undefined' ? window.navigator.userAgent : 'N/A',
-        referenciador: typeof window !== 'undefined' ? document.referrer : 'N/A',
-        fonteLeads: getLeadSource(source),
-        fonte: getLeadSource(source),
-        tipoFormulario: getFormType(source),
-        
-        // Dados adicionais
-        cargo: formData.position || '',
-        empresa: formData.company || '',
-        faturamentoMensal: formData.monthlyRevenue || '',
-        segmentoPersonalizado: formData.segment === 'Outro' ? formData.customSegment : undefined
+        arrobaDaEmpresa: formData.companyHandle,
+        horarioCadastro: horarioCadastro
       };
 
       // Debug: Log dos dados que serão enviados
-      console.log('Webhook payload:', webhookPayload);
-      console.log('Cargo específico:', formData.position);
+      console.log('Webhook Make.com payload:', makeWebhookPayload);
 
-      // Enviar webhook
-      const webhookSuccess = await sendWebhook(webhookPayload);
+      // Enviar webhook Make.com (formato simplificado)
+      const webhookSuccess = await sendMakeWebhook(makeWebhookPayload);
       
       if (!webhookSuccess) {
         console.warn('Webhook falhou, mas formulário foi processado');
@@ -256,6 +264,8 @@ export function LeadFormPage() {
       
     } catch (error) {
       console.error('Error submitting form:', error);
+      // Lazy load de analytics apenas em caso de erro
+      const { trackFormSubmit } = await import('@/lib/analytics');
       trackFormSubmit('lead_form', false);
     } finally {
       setIsSubmitting(false);
@@ -319,7 +329,13 @@ export function LeadFormPage() {
       </div>
 
       {/* Form Content */}
-      <div className="p-6 max-h-[60vh] overflow-y-auto">
+      <div 
+        ref={formContentRef}
+        className="p-6 max-h-[60vh] overflow-y-auto"
+        style={{
+          scrollBehavior: 'smooth'
+        }}
+      >
         {currentStep === 1 && (
           <div key="step1" className="space-y-6 animate-fadeIn">
               <div className="text-center mb-8">
@@ -379,21 +395,30 @@ export function LeadFormPage() {
 
         {currentStep === 2 && (
           <div key="step2" className="space-y-6 animate-fadeIn">
-              <div className="text-center mb-8">
+              <div className="text-center mb-4 md:mb-8">
                 <h3 className="text-2xl font-bold text-haast-black-graphite mb-2">
                 Quase lá!
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 text-sm md:text-base">
                 Só preciso de algumas informações rápidas pra agendar seu diagnóstico 📲
                 </p>
+                {/* Indicador visual de campos restantes no mobile */}
+                <div className="mt-4 md:hidden flex items-center justify-center space-x-2 text-xs text-gray-500">
+                  <span className="animate-bounce">⬇️</span>
+                  <span>Role para ver todos os campos</span>
+                  <span className="animate-bounce">⬇️</span>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="space-y-2">
+                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
                   Nome e Sobrenome *
                 </label>
                 <input
+                  id="fullName"
+                  name="fullName"
                   type="text"
+                  autoComplete="name"
                   value={formData.fullName}
                   onChange={(e) => handleInputChange('fullName', e.target.value)}
                   className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-haast-primary focus:border-transparent transition-all ${
@@ -406,13 +431,16 @@ export function LeadFormPage() {
                 )}
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="space-y-2">
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
                   <Phone className="inline h-4 w-4 mr-2" />
                   Telefone/WhatsApp *
                 </label>
                 <input
+                  id="phone"
+                  name="phone"
                   type="tel"
+                  autoComplete="tel"
                   value={formData.phone}
                   onChange={(e) => handleInputChange('phone', e.target.value)}
                   className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-haast-primary focus:border-transparent transition-all ${
@@ -425,13 +453,16 @@ export function LeadFormPage() {
                 )}
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="space-y-2">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                   <Mail className="inline h-4 w-4 mr-2" />
                   E-mail *
                 </label>
                 <input
+                  id="email"
+                  name="email"
                   type="email"
+                  autoComplete="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-haast-primary focus:border-transparent transition-all ${
@@ -444,15 +475,18 @@ export function LeadFormPage() {
                 )}
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="space-y-2 pb-4 md:pb-0">
+                <label htmlFor="companyHandle" className="block text-sm font-medium text-gray-700 mb-2">
                   <Building2 className="inline h-4 w-4 mr-2" />
                   @ da empresa *
                 </label>
                 <div className="relative">
                   <span className="absolute left-3 top-3 text-gray-500">@</span>
                   <input
+                    id="companyHandle"
+                    name="companyHandle"
                     type="text"
+                    autoComplete="organization"
                     value={formData.companyHandle}
                     onChange={(e) => handleInputChange('companyHandle', e.target.value)}
                     className={`w-full pl-8 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-haast-primary focus:border-transparent transition-all ${
@@ -496,13 +530,15 @@ export function LeadFormPage() {
                     onClick={() => {
                       setShowCalCom(true);
                       
-                      // Google Analytics 4 - Cal.com Open
-                      trackEvent('cal_com_open', {
-                        event_category: 'conversion',
-                        event_label: 'cal_com_button_click',
-                        form_source: source,
-                        form_step: 'success',
-                        button_location: 'step_3',
+                      // Lazy load de analytics apenas quando necessário
+                      import('@/lib/analytics').then(({ trackEvent }) => {
+                        trackEvent('cal_com_open', {
+                          event_category: 'conversion',
+                          event_label: 'cal_com_button_click',
+                          form_source: source,
+                          form_step: 'success',
+                          button_location: 'step_3',
+                        });
                       });
 
                       // Google Tag Manager - DataLayer
@@ -546,11 +582,13 @@ export function LeadFormPage() {
                       onClick={() => {
                         setShowCalCom(false);
                         
-                        // Track quando fecha o calendário
-                        trackEvent('cal_com_close', {
-                          event_category: 'engagement',
-                          event_label: 'cal_com_closed',
-                          form_source: source,
+                        // Lazy load de analytics apenas quando necessário
+                        import('@/lib/analytics').then(({ trackEvent }) => {
+                          trackEvent('cal_com_close', {
+                            event_category: 'engagement',
+                            event_label: 'cal_com_closed',
+                            form_source: source,
+                          });
                         });
                       }}
                       className="text-gray-500 hover:text-gray-700 transition-colors"

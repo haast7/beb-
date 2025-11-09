@@ -30,6 +30,16 @@ export interface WebhookPayload {
   segmentoPersonalizado?: string;
 }
 
+// Interface simplificada para o webhook do Make.com (página /lead)
+export interface MakeWebhookPayload {
+  trabalhaNaEmpresa: string; // "Sim" ou "Não"
+  nomeESobrenome: string;
+  telefoneWhatsapp: string;
+  email: string;
+  arrobaDaEmpresa: string; // @ da empresa
+  horarioCadastro: string; // Horário em formato brasileiro (São Paulo UTC-3)
+}
+
 export async function sendWebhook(payload: WebhookPayload): Promise<boolean> {
   try {
     const webhookUrl = 'https://hook.us2.make.com/36wse18cssqtw4ytl57ny7woif4r6m5l';
@@ -62,9 +72,41 @@ export async function sendWebhook(payload: WebhookPayload): Promise<boolean> {
   }
 }
 
-// Função para formatar data e hora no fuso horário do Brasil (UTC-3)
+// Função específica para enviar webhook simplificado para Make.com (página /lead)
+export async function sendMakeWebhook(payload: MakeWebhookPayload): Promise<boolean> {
+  try {
+    const webhookUrl = 'https://hook.us2.make.com/g4086bg3o5m0xqwz3cbxabguhp7ya1vx';
+    
+    // Debug: Log detalhado do payload
+    console.log('Enviando webhook Make.com com payload:', JSON.stringify(payload, null, 2));
+    
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      console.error('Erro ao enviar webhook Make.com:', response.status, response.statusText);
+      const responseText = await response.text();
+      console.error('Resposta do webhook:', responseText);
+      return false;
+    }
+
+    const responseText = await response.text();
+    console.log('Webhook Make.com enviado com sucesso! Resposta:', responseText);
+    return true;
+  } catch (error) {
+    console.error('Erro ao enviar webhook Make.com:', error);
+    return false;
+  }
+}
+
+// Função para formatar data e hora no fuso horário do Brasil (UTC-3 - São Paulo)
 export function formatBrazilianDateTime(date: Date): { data: string; hora: string; timestamp: string } {
-  // Usar o fuso horário do Brasil diretamente
+  // Usar o fuso horário do Brasil diretamente (America/Sao_Paulo = UTC-3)
   const brazilTime = new Date(date.toLocaleString("en-US", {timeZone: "America/Sao_Paulo"}));
   
   const data = brazilTime.toLocaleDateString('pt-BR', {
@@ -89,6 +131,27 @@ export function formatBrazilianDateTime(date: Date): { data: string; hora: strin
   });
   
   return { data, hora, timestamp };
+}
+
+// Função para formatar horário completo no formato brasileiro (São Paulo UTC-3)
+// Retorna: "14:18 09/11/2025"
+export function formatBrazilianDateTimeFull(date: Date): string {
+  // Usar o fuso horário do Brasil (America/Sao_Paulo = UTC-3)
+  const brazilTime = new Date(date.toLocaleString("en-US", {timeZone: "America/Sao_Paulo"}));
+  
+  const hora = brazilTime.toLocaleTimeString('pt-BR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+  
+  const data = brazilTime.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+  
+  return `${hora} ${data}`;
 }
 
 // Função para mapear fonte do lead baseada na URL e source
