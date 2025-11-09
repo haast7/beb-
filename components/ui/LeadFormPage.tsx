@@ -116,17 +116,24 @@ export function LeadFormPage() {
 
   const handleNext = () => {
     if (currentStep === 1 && validateStep1()) {
-      // Se a resposta for "Não", pular direto para o submit
-      if (formData.trabalhaEmLabClinicaHospital === 'Não') {
-        handleSubmit();
-      } else {
-        // Se for "Sim", vai para etapa 2
-        setCurrentStep(2);
-        trackEvent('form_step_completed', {
-          event_category: 'conversion',
-          event_label: 'step_1',
+      // Sempre vai para etapa 2, independente de "Sim" ou "Não"
+      setCurrentStep(2);
+      
+      // Google Analytics 4
+      trackEvent('form_step_completed', {
+        event_category: 'conversion',
+        event_label: 'step_1',
+        form_source: source,
+        step: 1
+      });
+
+      // Google Tag Manager
+      if (typeof window !== 'undefined' && window.dataLayer) {
+        window.dataLayer.push({
+          event: 'form_step_completed',
+          form_step: 1,
           form_source: source,
-          step: 1
+          timestamp: new Date().toISOString(),
         });
       }
     } else if (currentStep === 2 && validateStep2()) {

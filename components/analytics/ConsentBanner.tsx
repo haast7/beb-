@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { X, Settings, Shield } from 'lucide-react';
 import { 
@@ -13,6 +14,7 @@ import {
 } from '@/lib/cookies';
 
 export function ConsentBanner() {
+  const pathname = usePathname();
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [preferences, setPreferences] = useState<Omit<CookieConsent, 'timestamp' | 'version'>>({
@@ -22,6 +24,11 @@ export function ConsentBanner() {
   });
 
   useEffect(() => {
+    // Não mostrar banner na página /lead
+    if (pathname === '/lead') {
+      return;
+    }
+
     const savedConsent = getSavedConsent();
     
     if (!savedConsent || !isConsentValid(savedConsent)) {
@@ -34,7 +41,7 @@ export function ConsentBanner() {
       });
       applyAllConsent(savedConsent);
     }
-  }, []);
+  }, [pathname]);
 
   const applyConsent = (consent: Omit<CookieConsent, 'timestamp' | 'version'>) => {
     const fullConsent: CookieConsent = {
@@ -84,7 +91,8 @@ export function ConsentBanner() {
     }));
   };
 
-  if (!showBanner) return null;
+  // Não mostrar banner na página /lead
+  if (pathname === '/lead' || !showBanner) return null;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-haast-gray-dark border-t border-haast-gray-medium p-4">
