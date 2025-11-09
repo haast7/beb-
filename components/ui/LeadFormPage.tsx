@@ -288,23 +288,26 @@ export function LeadFormPage() {
   return (
     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-haast-primary to-haast-primary-dark p-6 text-white relative">
+      <div className="bg-gradient-to-r from-haast-primary to-haast-primary-dark p-4 md:p-6 text-white relative">
         {mounted && (currentStep === 1 || currentStep === 2 || currentStep === 3) ? (
-          <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-white/30 rounded-full flex items-center justify-center overflow-hidden shadow-lg relative">
+          <div className="flex items-center space-x-3 md:space-x-4">
+            <div className="w-12 h-12 md:w-16 md:h-16 bg-white/30 rounded-full flex items-center justify-center overflow-hidden shadow-lg flex-shrink-0">
               <Image 
                 src="/deyvisson.jpg" 
                 alt="Deyvisson Moitinho" 
-                fill
-                sizes="64px"
-                className="object-cover"
+                width={64}
+                height={64}
+                sizes="(max-width: 768px) 48px, 64px"
+                className="object-cover rounded-full"
                 priority
-                quality={85}
+                quality={75}
+                loading="eager"
+                fetchPriority="high"
               />
             </div>
-            <div>
-              <h2 className="text-xl font-bold">Deyvisson Moitinho</h2>
-              <p className="text-white/90 text-sm">Especialista Haast</p>
+            <div className="min-w-0">
+              <h2 className="text-lg md:text-xl font-bold truncate">Deyvisson Moitinho</h2>
+              <p className="text-white/90 text-xs md:text-sm">Especialista Haast</p>
             </div>
           </div>
         ) : (
