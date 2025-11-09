@@ -148,16 +148,41 @@ export function CalComInlineWidget() {
       }
     };
 
-    // Inicializar loader do Cal.com
-    initCalLoader();
-    
-    // Aguardar um pouco e inicializar
-    const timer = setTimeout(() => {
-      initializeCalCom();
-    }, 200);
+    // Inicializar loader do Cal.com apenas quando o componente estiver visível
+    let fallbackTimer: NodeJS.Timeout;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          initCalLoader();
+          // Aguardar um pouco e inicializar
+          setTimeout(() => {
+            initializeCalCom();
+          }, 200);
+          observer.disconnect();
+          if (fallbackTimer) clearTimeout(fallbackTimer);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    // Fallback: inicializar após 1s se não houver intersection
+    fallbackTimer = setTimeout(() => {
+      if (!initializedRef.current) {
+        initCalLoader();
+        setTimeout(() => {
+          initializeCalCom();
+        }, 200);
+      }
+      observer.disconnect();
+    }, 1000);
 
     return () => {
-      clearTimeout(timer);
+      clearTimeout(fallbackTimer);
+      observer.disconnect();
       const containerElement = containerRef.current;
       
       // Remover event listeners (usar a referência do handleBookingConfirmed se disponível)

@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, lazy, Suspense } from 'react';
+import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Check, Building2, User, Mail, Phone, DollarSign, TrendingUp, Calendar } from 'lucide-react';
 import { trackFormSubmit, trackEvent, trackMetaLead, trackMetaCompleteRegistration } from '@/lib/analytics';
 import { sendWebhook, formatBrazilianDateTime, getLeadSource, getFormType, mapCompanySize } from '@/lib/webhook';
-import { CalComInlineWidget } from '@/components/ui/CalComInlineWidget';
+
+// Lazy load do Cal.com widget - só carrega quando necessário
+const CalComInlineWidget = lazy(() => import('@/components/ui/CalComInlineWidget').then(mod => ({ default: mod.CalComInlineWidget })));
 
 interface LeadFormData {
   // Etapa 1
@@ -274,20 +276,20 @@ export function LeadFormPage() {
   };
 
   return (
-    <motion.div
-      initial={{ scale: 0.95, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden"
-    >
+    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-haast-primary to-haast-primary-dark p-6 text-white relative">
         {mounted && (currentStep === 1 || currentStep === 2 || currentStep === 3) ? (
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-white/30 rounded-full flex items-center justify-center overflow-hidden shadow-lg">
-              <img 
+            <div className="w-16 h-16 bg-white/30 rounded-full flex items-center justify-center overflow-hidden shadow-lg relative">
+              <Image 
                 src="/deyvisson.jpg" 
                 alt="Deyvisson Moitinho" 
-                className="w-full h-full object-cover"
+                fill
+                sizes="64px"
+                className="object-cover"
+                priority
+                quality={85}
               />
             </div>
             <div>
@@ -309,26 +311,17 @@ export function LeadFormPage() {
         
         {/* Progress Bar */}
         <div className="mt-4 w-full bg-white/20 rounded-full h-2">
-          <motion.div
-            className="bg-white rounded-full h-2"
-            initial={{ width: 0 }}
-            animate={{ width: `${(currentStep / 3) * 100}%` }}
-            transition={{ duration: 0.3 }}
+          <div
+            className="bg-white rounded-full h-2 transition-all duration-300"
+            style={{ width: `${(currentStep / 3) * 100}%` }}
           />
         </div>
       </div>
 
       {/* Form Content */}
       <div className="p-6 max-h-[60vh] overflow-y-auto">
-        <AnimatePresence mode="wait">
-          {currentStep === 1 && (
-            <motion.div
-              key="step1"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-6"
-            >
+        {currentStep === 1 && (
+          <div key="step1" className="space-y-6 animate-fadeIn">
               <div className="text-center mb-8">
                 <h3 className="text-2xl font-bold text-haast-black-graphite mb-2">
                 Vamos personalizar seu diagnóstico 🚀
@@ -381,17 +374,11 @@ export function LeadFormPage() {
                   <p className="text-red-500 text-sm mt-1">{errors.trabalhaEmLabClinicaHospital}</p>
                 )}
               </div>
-            </motion.div>
-          )}
+          </div>
+        )}
 
-          {currentStep === 2 && (
-            <motion.div
-              key="step2"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-6"
-            >
+        {currentStep === 2 && (
+          <div key="step2" className="space-y-6 animate-fadeIn">
               <div className="text-center mb-8">
                 <h3 className="text-2xl font-bold text-haast-black-graphite mb-2">
                 Quase lá!
@@ -478,18 +465,11 @@ export function LeadFormPage() {
                   <p className="text-red-500 text-sm mt-1">{errors.companyHandle}</p>
                 )}
               </div>
+          </div>
+        )}
 
-            </motion.div>
-          )}
-
-          {currentStep === 3 && (
-            <motion.div
-              key="step3"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="text-center py-12"
-            >
+        {currentStep === 3 && (
+          <div key="step3" className="text-center py-12 animate-fadeIn">
               <div className="w-24 h-24 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Check className="h-12 w-12 text-white" />
               </div>
@@ -582,7 +562,16 @@ export function LeadFormPage() {
                     </button>
                   </div>
                   <div className="w-full">
-                    <CalComInlineWidget />
+                    <Suspense fallback={
+                      <div className="w-full h-[600px] flex items-center justify-center bg-gray-50 rounded-lg">
+                        <div className="text-center">
+                          <div className="w-8 h-8 border-4 border-haast-primary border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                          <p className="text-gray-600 text-sm">Carregando calendário...</p>
+                        </div>
+                      </div>
+                    }>
+                      <CalComInlineWidget />
+                    </Suspense>
                   </div>
                 </div>
               )}
@@ -652,9 +641,8 @@ export function LeadFormPage() {
                   </button>
                 </div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          </div>
+        )}
       </div>
 
       {/* Footer */}
@@ -692,7 +680,7 @@ export function LeadFormPage() {
           </button>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
 

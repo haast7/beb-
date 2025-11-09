@@ -15,9 +15,12 @@ export default function LeadLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-haast-black-graphite to-haast-primary flex items-center justify-center p-4">
-      {children}
-    </div>
+    <>
+      <link rel="preload" href="/deyvisson.jpg" as="image" type="image/jpeg" />
+      <div className="min-h-screen bg-gradient-to-br from-black via-haast-black-graphite to-haast-primary flex items-center justify-center p-4">
+        {children}
+      </div>
+    </>
   );
 }
 
