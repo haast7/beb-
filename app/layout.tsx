@@ -6,10 +6,7 @@ import { ConditionalLayout } from '@/components/layout/ConditionalLayout';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ConsentBanner } from '@/components/analytics/ConsentBanner';
-import { GoogleTagManager } from '@/components/analytics/GoogleTagManager';
-import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
-import { MetaPixel } from '@/components/analytics/MetaPixel';
-import { ScrollTracking } from '@/components/analytics/ScrollTracking';
+import { ConditionalAnalytics } from '@/components/analytics/ConditionalAnalytics';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -114,9 +111,6 @@ export default function RootLayout({
         {/* Preload de recursos críticos */}
         <link rel="preload" href="/logo.png" as="image" type="image/png" fetchPriority="high" />
         
-        <GoogleTagManager />
-        <GoogleAnalytics />
-        <MetaPixel />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -134,9 +128,8 @@ export default function RootLayout({
         >
           Pular para o conteúdo principal
         </a>
-        <GoogleTagManager />
+        <ConditionalAnalytics />
         <ConsentBanner />
-        <ScrollTracking />
         <Suspense fallback={
           <>
             <Header />
